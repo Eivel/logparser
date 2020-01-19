@@ -1,19 +1,12 @@
 require_relative "spec_helper"
 require_relative "../app/logparser"
+require "pry"
 
 RSpec.describe LogParser do
   subject { described_class.new(filename) }
 
   let(:filename) do
-    "test.log"
-  end
-
-  let(:data) do
-    "/help_page 126.318.035.038
-    /help_page 184.123.665.067
-    /help_page 184.123.665.067
-    /contact 184.123.665.067
-    /contact 184.123.665.067"
+    "spec/sample.log"
   end
 
   context "calculate a number of visits" do
