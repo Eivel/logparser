@@ -4,10 +4,10 @@ class LogParser
   end
 
   def calculate_stats
-    [
-      { address: "/help_page", visits: 3, unique: 2 },
-      { address: "/contact", visits: 2, unique: 1 }
-    ]
+    {
+      "/help_page" => { visits: 3, unique: 2 },
+      "/contact" => { visits: 2, unique: 1 }
+    }
   end
 
   def present_data

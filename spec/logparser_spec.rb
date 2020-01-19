@@ -19,10 +19,10 @@ RSpec.describe LogParser do
   context "calculate a number of visits" do
     it "returns parsed data" do
       expect(subject.calculate_stats).to eq(
-        [
-          { address: "/help_page", visits: 3, unique: 2 },
-          { address: "/contact", visits: 2, unique: 1 }
-        ]
+        {
+          "/help_page" => { visits: 3, unique: 2 },
+          "/contact" => { visits: 2, unique: 1 }
+        }
       )
     end
   end
