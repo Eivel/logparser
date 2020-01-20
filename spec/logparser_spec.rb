@@ -9,6 +9,22 @@ RSpec.describe LogParser do
     'spec/sample.log'
   end
 
+  context 'check line for the proper format' do
+    let(:content) { '/help_page corrupted 126.318.035.038' }
+
+    it 'returns error for the incorrect format' do
+      allow(File).to receive(:foreach).and_yield(content)
+      expect { subject.calculate_stats }.to raise_error(
+        RegexpError,
+        'Incorrect line format.'
+      )
+    end
+
+    it 'does not return error for the correct format' do
+      expect { subject.calculate_stats }.not_to raise_error
+    end
+  end
+
   context 'raises error in case of non-existing file' do
     let(:filepath) { 'unavailable' }
     it 'returns correct error' do
