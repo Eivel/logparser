@@ -1,6 +1,7 @@
 class LogParser
-  def initialize(filename)
-    @filename = filename
+  def initialize(filepath)
+    raise IOError, "File does not exist." unless File.file?(filepath)
+    @filepath = filepath
   end
 
   def calculate_stats
@@ -31,7 +32,7 @@ class LogParser
 
   def load_visits_and_ips
     stats = {}
-    File.foreach(@filename) do |line|
+    File.foreach(@filepath) do |line|
       address, ip = line.split(" ")
       if stats.key?(address)
         stats[address][:visits] += 1

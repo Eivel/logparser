@@ -3,10 +3,17 @@ require_relative "../app/logparser"
 require "pry"
 
 RSpec.describe LogParser do
-  subject { described_class.new(filename) }
+  subject { described_class.new(filepath) }
 
-  let(:filename) do
+  let(:filepath) do
     "spec/sample.log"
+  end
+
+  context "raises error in case of non-existing file" do
+    let(:filepath) { "unavailable" }
+    it "returns correct error" do
+      expect { subject }.to raise_error(IOError, "File does not exist.")
+    end
   end
 
   context "calculate a number of visits" do
