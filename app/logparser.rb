@@ -1,6 +1,8 @@
+# LogParser processes log files to produce general access stats.
 class LogParser
   def initialize(filepath)
-    raise IOError, "File does not exist." unless File.file?(filepath)
+    raise IOError, 'File does not exist.' unless File.file?(filepath)
+
     @filepath = filepath
   end
 
@@ -33,7 +35,7 @@ class LogParser
   def load_visits_and_ips
     stats = {}
     File.foreach(@filepath) do |line|
-      address, ip = line.split(" ")
+      address, ip = line.split(' ')
       if stats.key?(address)
         stats[address][:visits] += 1
         stats[address][:ips][ip] = true

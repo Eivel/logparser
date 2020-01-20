@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require_relative "./app/logparser"
+require_relative './app/logparser'
 
-return puts "You must provide a path to the input file." if ARGV.empty?
+return puts 'You must provide a path to the input file.' if ARGV.empty?
 
 filepath = ARGV[0]
 begin
