@@ -10,10 +10,11 @@ RSpec.describe LogParser do
   end
 
   context 'check line for the proper format' do
-    let(:content) { '/help_page corrupted 126.318.035.038' }
+    let(:corrupted_content) { '/help_page corrupted 126.318.035.038' }
+    let(:correct_content_w_number) { '/help_page/1 126.318.035.038' }
 
     it 'returns error for the incorrect format' do
-      allow(File).to receive(:foreach).and_yield(content)
+      allow(File).to receive(:foreach).and_yield(corrupted_content)
       expect { subject.calculate_stats }.to raise_error(
         RegexpError,
         'Incorrect line format.'
@@ -21,6 +22,11 @@ RSpec.describe LogParser do
     end
 
     it 'does not return error for the correct format' do
+      expect { subject.calculate_stats }.not_to raise_error
+    end
+
+    it 'does not return error for paths that contain number' do
+      allow(File).to receive(:foreach).and_yield(correct_content_w_number)
       expect { subject.calculate_stats }.not_to raise_error
     end
   end

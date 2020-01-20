@@ -61,7 +61,7 @@ class LogParser
   end
 
   def check_line_format(line)
-    regexp = %r{^\/\w+\s\d+\.\d+\.\d+\.\d+$}
+    regexp = %r{^\/\S+\s\d+\.\d+\.\d+\.\d+$}
     raise RegexpError, 'Incorrect line format.' unless regexp.match?(line)
   end
 
