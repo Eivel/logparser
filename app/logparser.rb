@@ -11,7 +11,20 @@ class LogParser
   end
 
   def present_data
-    "/help_page 3 visits\n/contact 2 visits\n/help_page 2 unique views \n/contact 1 unique views"
+    stats = calculate_stats
+    visits_output = stats
+      .sort_by { |_, details| details[:visits] }
+      .map { |address, details| "#{address} #{details[:visits]} visits" }
+      .reverse
+      .join("\n")
+
+    unique_views_output = stats
+      .sort_by { |_, details| details[:unique] }
+      .map { |address, details| "#{address} #{details[:unique]} unique views" }
+      .reverse
+      .join("\n")
+
+    "#{visits_output}\n#{unique_views_output}"
   end
 
   private

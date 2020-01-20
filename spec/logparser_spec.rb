@@ -23,7 +23,7 @@ RSpec.describe LogParser do
   context "present data in the requested format" do
     it "returns parsed data" do
       expect(subject.present_data).to eq(
-        "/help_page 3 visits\n/contact 2 visits\n/help_page 2 unique views \n/contact 1 unique views"
+        "/help_page 3 visits\n/contact 2 visits\n/help_page 2 unique views\n/contact 1 unique views"
       )
     end
   end
