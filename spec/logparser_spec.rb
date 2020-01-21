@@ -2,7 +2,6 @@ require_relative 'spec_helper'
 require_relative '../app/logparser'
 require_relative '../app/metrics/visits_for_page_metric'
 require_relative '../app/metrics/unique_views_for_page_metric'
-require 'pry'
 
 RSpec.describe LogParser do
   subject { described_class.new(filepath) }

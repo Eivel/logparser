@@ -1,5 +1,5 @@
 require_relative 'base_metric'
-require 'pry'
+
 # PageViewsForIPMetric calculates number of webpage visits
 # for each ip in the provided lines.
 class PageViewsForIPMetric < BaseMetric
