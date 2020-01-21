@@ -1,5 +1,7 @@
 require_relative 'spec_helper'
 require_relative '../app/logparser'
+require_relative '../app/metrics/visits_for_page_metric'
+require_relative '../app/metrics/unique_views_for_page_metric'
 require 'pry'
 
 RSpec.describe LogParser do
@@ -9,28 +11,6 @@ RSpec.describe LogParser do
     'spec/sample.log'
   end
 
-  context 'check line for the proper format' do
-    let(:corrupted_content) { '/help_page corrupted 126.318.035.038' }
-    let(:correct_content_w_number) { '/help_page/1 126.318.035.038' }
-
-    it 'returns error for the incorrect format' do
-      allow(File).to receive(:foreach).and_yield(corrupted_content)
-      expect { subject.calculate_stats }.to raise_error(
-        RegexpError,
-        'Incorrect line format.'
-      )
-    end
-
-    it 'does not return error for the correct format' do
-      expect { subject.calculate_stats }.not_to raise_error
-    end
-
-    it 'does not return error for paths that contain number' do
-      allow(File).to receive(:foreach).and_yield(correct_content_w_number)
-      expect { subject.calculate_stats }.not_to raise_error
-    end
-  end
-
   context 'raises error in case of non-existing file' do
     let(:filepath) { 'unavailable' }
     it 'returns correct error' do
@@ -38,20 +18,44 @@ RSpec.describe LogParser do
     end
   end
 
-  context 'calculate a number of visits' do
-    it 'returns parsed data' do
-      expect(subject.calculate_stats).to eq(
-        '/help_page' => { visits: 3, unique: 2 },
-        '/contact' => { visits: 2, unique: 1 }
-      )
+  context 'process_file' do
+    it 'returns metrics with processed stats' do
+      metrics = [VisitsForPageMetric.new, UniqueViewsForPageMetric.new]
+      metrics = subject.send(:process_file, metrics)
+
+      aggregate_failures do
+        expect(metrics[0].stats).to eq(
+          '/help_page' => { visits: 4 },
+          '/contact' => { visits: 2 }
+        )
+        expect(metrics[1].stats).to eq(
+          '/help_page' => {
+            ips: {
+              '126.318.035.038' => true,
+              '184.123.665.067' => true
+            }
+          },
+          '/contact' => {
+            ips: {
+              '184.123.665.067' => true
+            }
+          }
+        )
+      end
     end
   end
 
-  context 'present data in the requested format' do
-    it 'returns parsed data' do
-      expect(subject.present_data).to eq(
-        "/help_page 3 visits\n/contact 2 visits\n"\
-          "/help_page 2 unique views\n/contact 1 unique views"
+  context 'present_metrics' do
+    it 'returns metrics text output with processed stats' do
+      metrics_classes = [VisitsForPageMetric, UniqueViewsForPageMetric]
+      output = subject.send(:present_metrics, *metrics_classes)
+
+      expect(output).to eq(
+        "All visits for each webpage:\n"\
+        "/help_page 4 visits\n/contact 2 visits"\
+        "\n\n"\
+        "Unique views for each webpage:\n"\
+        "/help_page 2 unique views\n/contact 1 unique views"
       )
     end
   end
