@@ -14,6 +14,6 @@ begin
     UniqueViewsForPageMetric,
     PageViewsForIPMetric
   )
-rescue IOError => e
+rescue IOError, RegexpError => e
   puts e.message
 end
